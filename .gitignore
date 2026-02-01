@@ -1,0 +1,6 @@
+# archivos y carpetas generados por eclipse
+.classpath
+.project
+.settings
+bin/
+target/
