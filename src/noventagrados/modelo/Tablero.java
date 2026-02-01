@@ -1,48 +1,52 @@
 package noventagrados.modelo;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import noventagrados.util.Coordenada;
 
 /**
- * Representacion del tablero de juego Noventa grados, compuesto de celdas en
- * una matriz bidimensional.
+ * Representacion del tablero de juego Noventa grados.
  * <p>
  * Tablero de tamaño fijo 7x7, las celdas se inicializan vacia al momento de la
  * creacion del tablero.
  * 
  * 
  * @author <a href="lmr1027@alu.ubu.es">Luis Menendez</a>
- * @version 1.0
- * @since 26/10/2024
+ * @version 2.0
+ * @since 1.0
  */
 public class Tablero {
 
 	/**
-	 * Matriz bidimensional que representa el tablero de juego, donde cada celda
-	 * puede contener una pieza o estar vacía.
+	 * Lista que representa el tablero del juego, cada celda puede contener una
+	 * pieza o estar vacia.
 	 */
-	private Celda[][] matriz;
+	private List<Celda> celdas;
 
 	/**
-	 * Tamaño constante del tablero de juego, representando el número de filas y
-	 * columnas (7x7).
+	 * Tamaño constante del tablero de juego, representando el número de filas.
 	 */
-	private final int TAMANO = 7;
+	private final int FILA = 7;
+	/**
+	 * Tamaño constante del tablero de juego, representando el número columnas
+	 * (7x7).
+	 */
+	private final int COLUMNA = 7;
 
 	/**
 	 * Constructor, crea un tablero de tamaño fijo (7x7) con cada celda inicializada
 	 * como vacia.
 	 */
 	public Tablero() {
-		matriz = new Celda[TAMANO][TAMANO];
+		celdas = new ArrayList<Celda>(FILA * COLUMNA);
 
-		for (int i = 0; i < TAMANO; i++) {
-			for (int j = 0; j < TAMANO; j++) {
-				matriz[i][j] = new Celda(new Coordenada(i, j));
+		for (int i = 0; i < FILA; i++) {
+			for (int j = 0; j < COLUMNA; j++) {
+				celdas.add(new Celda(new Coordenada(i, j)));
 			}
 		}
-
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class Tablero {
 		for (int i = 0; i < consultarNumeroFilas(); i++) {
 			pantalla = pantalla.concat(Integer.toString(i));
 			for (int j = 0; j < consultarNumeroColumnas(); j++) {
-				Celda celda = matriz[i][j];
+				Celda celda = obtenerCelda(new Coordenada(i, j));
 				if (celda.estaVacia()) {
 					pantalla = pantalla.concat("-- ");
 				} else {
@@ -84,12 +88,10 @@ public class Tablero {
 	public Tablero clonar() {
 		Tablero tableroClon = new Tablero();
 
-		for (int i = 0; i < consultarNumeroFilas(); i++) {
-			for (int j = 0; j < consultarNumeroColumnas(); j++) {
-				if (matriz[i][j] != null) {
-					tableroClon.matriz[i][j] = matriz[i][j].clonar();
-				}
-			}
+		for (Celda celda : celdas) {
+			Celda clon = celda.clonar();
+			Coordenada coordenada = clon.consultarCoordenada();
+			tableroClon.colocar(clon.consultarPieza(), coordenada);
 		}
 		return tableroClon;
 	}
@@ -108,12 +110,15 @@ public class Tablero {
 		if (pieza == null || coordenada == null || !estaEnTablero(coordenada)) {
 			return;
 		}
-		matriz[coordenada.fila()][coordenada.columna()].colocar(pieza);
+		Celda celda = obtenerCelda(coordenada);
+		if(celda != null) {
+			celda.colocar(pieza);
+		}
 	}
 
 	/**
 	 * Devuelve un clon en profundidad de la celda con las coordenadas indicadas. Si
-	 * las coordenadas no estan en el tablero devuelve un valor null.
+	 * las coordenadas no estan en el tablero devuelve un valor null
 	 * 
 	 * @param coordenada La coordenada de la celda a consultar
 	 * @return Un clon profundo de la celda en la coordenada indicada, o null si
@@ -121,7 +126,7 @@ public class Tablero {
 	 */
 
 	public Celda consultarCelda(Coordenada coordenada) {
-		return (estaEnTablero(coordenada)) ? matriz[coordenada.fila()][coordenada.columna()].clonar() : null;
+		return (estaEnTablero(coordenada)) ? obtenerCelda(coordenada).clonar() : null;
 	}
 
 	/**
@@ -132,16 +137,11 @@ public class Tablero {
 	 * @return Un array de una dimensión de tipo {@code Celda[]} con clones
 	 *         profundos de las celdas del tablero, siguiendo el orden recorrido.
 	 */
-	public Celda[] consultarCeldas() {
-		int filas = consultarNumeroFilas();
-		int columnas = consultarNumeroColumnas();
-		Celda[] celdasClonadas = new Celda[filas * columnas];
-		int indice = 0;
+	public List<Celda> consultarCeldas() {
+		List<Celda> celdasClonadas = new ArrayList<>();
 
-		for (int i = 0; i < filas; i++) {
-			for (int j = 0; j < columnas; j++) {
-				celdasClonadas[indice++] = (matriz[i][j] != null) ? matriz[i][j].clonar() : null;
-			}
+		for (Celda celda : celdas) {
+			celdasClonadas.add(celda != null ? celda.clonar() : null);
 		}
 		return celdasClonadas;
 	}
@@ -152,7 +152,7 @@ public class Tablero {
 	 * @return El numero de columnas
 	 */
 	public int consultarNumeroColumnas() {
-		return matriz[0].length;
+		return COLUMNA;
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class Tablero {
 	 * @return El numero de filas
 	 */
 	public int consultarNumeroFilas() {
-		return matriz.length;
+		return FILA;
 	}
 
 	/**
@@ -175,7 +175,9 @@ public class Tablero {
 		if (coordenada == null || !estaEnTablero(coordenada)) {
 			return;
 		}
-		Celda celda = matriz[coordenada.fila()][coordenada.columna()];
+		int indice = coordenada.fila() * consultarNumeroColumnas() + coordenada.columna();
+		Celda celda = celdas.get(indice);
+
 		if (celda != null) {
 			celda.eliminarPieza();
 		}
@@ -192,14 +194,14 @@ public class Tablero {
 		int fila = coordenada.fila();
 		int columna = coordenada.columna();
 
-		return (fila >= 0 && fila < TAMANO) && (columna >= 0 && columna < TAMANO);
+		return (fila >= 0 && fila < FILA) && (columna >= 0 && columna < COLUMNA);
 	}
 
 	/**
 	 * Obtiene la celda en la coordenada especificada si esta se encuentra dentro
 	 * del tablero.
 	 * <p>
-	 * Si la coordenada esta fuera del tablero, devuelve {@code null}
+	 * Si la coordenada esta fuera del tablero, devuelve {@code null}.
 	 * </p>
 	 * 
 	 * @param coordenada La coordenada de la celda que se desea obtener
@@ -207,15 +209,18 @@ public class Tablero {
 	 *         el tablero
 	 */
 	Celda obtenerCelda(Coordenada coordenada) {
-		return estaEnTablero(coordenada) ? matriz[coordenada.fila()][coordenada.columna()] : null;
+		Celda celda = null;
+
+		if (estaEnTablero(coordenada)) {
+			int indice = coordenada.fila() * consultarNumeroColumnas() + coordenada.columna();
+			celda = celdas.get(indice);
+		}
+		return celda;
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.deepHashCode(matriz);
-		return result;
+		return Objects.hash(COLUMNA, FILA, celdas);
 	}
 
 	@Override
@@ -227,12 +232,14 @@ public class Tablero {
 		if (getClass() != obj.getClass())
 			return false;
 		Tablero other = (Tablero) obj;
-		return Arrays.deepEquals(matriz, other.matriz);
+		return COLUMNA == other.COLUMNA && FILA == other.FILA && Objects.equals(celdas, other.celdas);
 	}
 
 	@Override
 	public String toString() {
-		return "Tablero [matriz=" + Arrays.toString(matriz) + "]";
+		return "Tablero [celdas=" + celdas + ", FILA=" + FILA + ", COLUMNA=" + COLUMNA + "]";
 	}
 
+	
+	
 }

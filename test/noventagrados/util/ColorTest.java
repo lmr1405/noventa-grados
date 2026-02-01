@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +18,7 @@ import org.junit.jupiter.api.Timeout;
  * en primer lugar, antes de proseguir con el resto de clases.
  * 
  * @author <a href="mailto:rmartico@ubu.es">Raúl Marticorena Sánchez</a>
- * @version 1.0 20220803
+ * @version 1.0 
  * 
  */
 @DisplayName("Tests sobre Color (sin dependencias de otras clases).")

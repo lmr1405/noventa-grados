@@ -120,7 +120,7 @@ public class ArbitroPartidaSinEmpujonesTest {
 				6 -- -- -- PN PN -- RN
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de blancas alcanzando la posición central.",
 				() -> assertThat("Debería ganar piezas blancas.", arbitro.consultarTurnoGanador(), is(Color.BLANCO)),
 				() -> assertThat("Deberían estar todos los peones blancos sobre el tablero.",
@@ -206,7 +206,7 @@ public class ArbitroPartidaSinEmpujonesTest {
 				6 -- -- -- -- -- -- --
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de negras alcanzando la posición central.",
 				() -> assertThat("Debería ganar piezas negras.", arbitro.consultarTurnoGanador(), is(Color.NEGRO)),
 				() -> assertThat("Deberían estar todos los peones blancos sobre el tablero.",

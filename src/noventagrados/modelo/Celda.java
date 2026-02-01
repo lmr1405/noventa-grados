@@ -11,8 +11,8 @@ import noventagrados.util.Coordenada;
  * Cada celda tine una coordenada y puede contener una pieza.
  * 
  * @author <a href="lmr1027@alu.ubu.es">Luis Menendez</a>
- * @version 1.0
- * @since 25/10/2024
+ * @version 2.0
+ * @since 1.0
  */
 
 public class Celda {
@@ -63,7 +63,7 @@ public class Celda {
 	 * Consula el color de la pieza actual en la celda.
 	 * 
 	 * @return El color de la pieza actual, si no esta vacia, o nulo en caso
-	 *         contrario
+	 *         contrario.
 	 */
 	public Color consultarColorDePieza() {
 		return (pieza != null) ? pieza.consultarColor() : null;
@@ -72,7 +72,7 @@ public class Celda {
 	/**
 	 * Devuelve la coordenada que esta en una celda.
 	 * 
-	 * @return La coordenada en la celda
+	 * @return La coordenada en la celda.
 	 */
 	public Coordenada consultarCoordenada() {
 		return coordenada;
@@ -81,7 +81,7 @@ public class Celda {
 	/**
 	 * Devuelve la pieza que se encuentra en la celda.
 	 * 
-	 * @return La pieza que esta en la celda
+	 * @return La pieza que esta en la celda.
 	 */
 	public Pieza consultarPieza() {
 		return pieza;
@@ -98,7 +98,7 @@ public class Celda {
 	/**
 	 * Indica si la celda esta vacía.
 	 * 
-	 * @return {@code true} si no hay pieza y {@code false} en caso contrario
+	 * @return {@code true} si no hay pieza y {@code false} en caso contrario.
 	 */
 	public boolean estaVacia() {
 		return pieza == null;

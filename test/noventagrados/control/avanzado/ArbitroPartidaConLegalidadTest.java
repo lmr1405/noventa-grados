@@ -135,7 +135,7 @@ public class ArbitroPartidaConLegalidadTest {
 				6 PB -- -- PN -- -- RN
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de blancas alcanzando la posición central.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 
@@ -229,7 +229,7 @@ public class ArbitroPartidaConLegalidadTest {
 				6 -- PN PN -- -- -- --
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de negras alcanzando la posición central.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 

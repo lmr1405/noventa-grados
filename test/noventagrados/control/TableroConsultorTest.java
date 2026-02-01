@@ -45,13 +45,13 @@ import noventagrados.util.TipoPieza;
 public class TableroConsultorTest {
 
 	/** Tablero consultor de testing. */
-	private TableroConsultor tableroConsultor;
+	private TableroConsultor<Tablero> tableroConsultor;
 
 	/** Inicializa valores para cada test. */
 	@BeforeEach
 	@Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
 	void inicializar() {
-		tableroConsultor = new TableroConsultor(new Tablero());
+		tableroConsultor = new TableroConsultor<>(new Tablero());
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConPiezas = new Tablero();
 			colocarPiezasConsecutivas(tableroConPiezas);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConPiezas);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConPiezas);
 			Coordenada coordenada1 = new Coordenada(filaOrigen, columnaOrigen);
 			// when
 			// then
@@ -385,7 +385,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConPiezas = new Tablero();
 			colocarPiezasConsecutivas(tableroConPiezas);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConPiezas);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConPiezas);
 			Coordenada coordenada1 = new Coordenada(filaOrigen, columnaOrigen);
 			// when
 			// then
@@ -458,7 +458,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConPiezas = new Tablero();
 			colocarPiezasAlternas(tableroConPiezas);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConPiezas);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConPiezas);
 			Coordenada coordenada1 = new Coordenada(filaOrigen, columnaOrigen);
 			// when
 			// then
@@ -485,7 +485,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConPiezas = new Tablero();
 			colocarPiezasAlternas(tableroConPiezas);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConPiezas);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConPiezas);
 			Coordenada coordenada1 = new Coordenada(filaOrigen, columnaOrigen);
 			// when
 			// then
@@ -506,7 +506,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConPiezas = new Tablero();
 			colocarPiezasAlternas(tableroConPiezas);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConPiezas);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConPiezas);
 			// when
 			// then
 			assertAll("reina blanca en el centro y la negra no",
@@ -540,7 +540,7 @@ public class TableroConsultorTest {
 				for (Color color : Color.values()) {
 					final Tablero tableroLocal = new Tablero();
 					final int TOTAL_CELDAS = tableroLocal.consultarNumeroFilas() * tableroLocal.consultarNumeroColumnas();
-					final TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroLocal);					
+					final TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroLocal);					
 					// Rellenamos el tablero de instancias del mismo tipo de pieza y color
 					for (int fila = 0; fila < tableroLocal.consultarNumeroFilas(); fila++) {
 						for (int columna = 0; columna < tableroLocal.consultarNumeroColumnas(); columna++) {
@@ -631,7 +631,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConReinaBlancaEnElCentro = new Tablero();
 			colocarReinaBlancaEnCentro(tableroConReinaBlancaEnElCentro);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConReinaBlancaEnElCentro);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConReinaBlancaEnElCentro);
 			// when
 			// then
 			assertAll("reina blanca en el centro y la negra no",
@@ -657,7 +657,7 @@ public class TableroConsultorTest {
 			// given
 			Tablero tableroConReinaNegraEnElCentro = new Tablero();
 			colocarReinaNegraEnCentro(tableroConReinaNegraEnElCentro);
-			TableroConsultor tableroConsultorLocal = new TableroConsultor(tableroConReinaNegraEnElCentro);
+			TableroConsultor<Tablero> tableroConsultorLocal = new TableroConsultor<>(tableroConReinaNegraEnElCentro);
 			// when
 			// then
 			assertAll("reina negra en el centro y la blanca no",

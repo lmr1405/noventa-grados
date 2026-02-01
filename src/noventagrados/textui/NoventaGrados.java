@@ -1,11 +1,16 @@
 package noventagrados.textui;
 
+import java.util.Date;
 import java.util.Scanner;
 
 import noventagrados.control.Arbitro;
+import noventagrados.control.undo.MaquinaDelTiempoConArbitros;
+import noventagrados.control.undo.MaquinaDelTiempoConJugadas;
+import noventagrados.control.undo.MecanismoDeDeshacer;
 import noventagrados.modelo.Celda;
 import noventagrados.modelo.Jugada;
 import noventagrados.modelo.Tablero;
+import noventagrados.textui.excepcion.OpcionNoDisponibleException;
 import noventagrados.util.Coordenada;
 
 /**
@@ -24,11 +29,12 @@ import noventagrados.util.Coordenada;
  * @author <a href="rmartico@ubu.es">Raúl Marticorena</a>
  * @author <a href="lmr1027@alu.ubu.es">Luis Menendez</a>
  * @since 1.0
- * @version 1.0
+ * @version 1.0.1
  * @see noventagrados.modelo
  * @see noventagrados.control
  * @see noventagrados.util
  */
+
 public class NoventaGrados {
 
 	/** Tamaño en caracteres de una jugada. */
@@ -40,14 +46,21 @@ public class NoventaGrados {
 	/** Texto para interrumpir la partida. */
 	private static final String TEXTO_SALIR = "salir";
 
-	/** Tablero. */
-	private static Tablero tablero;
-
 	/** Árbitro. */
 	private static Arbitro arbitro;
 
 	/** Lector por teclado. */
 	private static Scanner scanner;
+
+	/**
+	 * Mecanismo para deshacer partidas.
+	 */
+	private static MecanismoDeDeshacer deshacer;
+
+	/**
+	 * Tipo de mecanismo de deshacer a instanciar.
+	 */
+	private static String configuracion;
 
 	/** Oculta el constructor por defecto. */
 	private NoventaGrados() {
@@ -61,38 +74,158 @@ public class NoventaGrados {
 	public static void main(String[] args) {
 		// COMPLETAR POR EL ALUMNADO
 		// REUTILIZAR AQUELLOS MÉTODOS YA PROPORCIONADOS QUE SEAN NECESARIOS
-		inicializarPartida();
-		mostrarMensajeBienvenida();
-		mostrarTablero();
+		// OBLIGATORIO INCLUIR TRATAMIENTO DE EXCEPCIONES ASEGURANDO ROBUSTEZ
+
+		//inicializamos scanner para la entrada de texto desde la consola
+		scanner = new Scanner(System.in);
 		
-		boolean partidaEnMarcha = true;
+		//args son los argumentos pasados al programa desde la linea de comandos
+		if(args == null || args.length ==0) {			
+			// se establece jugadas por defecto, si los argumentos son vacio o null
+	        args = new String[] {"jugadas"};
+		}
 		
-		while(partidaEnMarcha) {
-			String textJugadaActual = recogerTextoDeJugadaPorTeclado();
-			if(comprobarSalir(textJugadaActual)) {
-				partidaEnMarcha = false;
-			} else {
-				if(validarFormato(textJugadaActual)) {
-					Jugada jugada = extraerJugada(textJugadaActual);
-					if(esLegal(jugada)) {
-						realizarEmpujón(jugada);
-						if(comprobarFinalizacionPartida()) {
-							partidaEnMarcha = false;
-							mostrarGanador();
-						} else {
-							cambiarTurnoPartida();
+		//intenta inicializar el juego
+		try {
+			//establece el modo en base a los argumentos, por defecto hemos dicho que era jugada
+			extraerModoDeshacer(args);
+			//Configura el estado inicial del juego
+			inicializarPartida();
+			//muestra el mensaje y el estado inicial del tablero
+			mostrarMensajeBienvenida();
+			mostrarTablero();
+
+			//variable booleana para que el juego puede continuar ejecutandose
+			boolean partidaEnMarcha = true;
+
+			//mietras esa variable sea true el juego se sigue ejecutando
+			while (partidaEnMarcha) {
+				try {
+					//recoge la entrada del usuario desde el teclado
+					String textoJugadaActual = recogerTextoDeJugadaPorTeclado();
+					//comprueba el texto para salir y terminar la partida
+					if (comprobarSalir(textoJugadaActual)) {
+						partidaEnMarcha = false;
+					//si el texto es deshacer se ejecuta deshacerjugada()
+					} else if (comprobarDeshacer(textoJugadaActual)) {
+						deshacerJugada();
+					//si el texto no es lo que esperamos, se muestra el mensaje de error
+					} else if (!validarFormato(textoJugadaActual)) {
+						mostrarErrorEnFormatoDeEntrada();
+					} else {
+						//
+						Jugada jugada = extraerJugada(textoJugadaActual);
+						//si la jugada no es legal se muestra un mensaje y vuelve a mostrar el tablero
+						if (!esLegal(jugada)) {
+							mostrarErrorPorMovimientoIlegal(textoJugadaActual);
 							mostrarTablero();
+						} else {
+							//si la jugada es valida realiza el movimiento
+							realizarEmpujón(jugada);
+							//comprueba que la partida ha llegado a su fin y muestra el ganar
+							if (comprobarFinalizacionPartida()) {
+								partidaEnMarcha = false;
+								mostrarGanador();
+							} else {
+								//si el juego aun no terminado, cambia de turno y vuelve a mostrar el tablero
+								cambiarTurnoPartida();
+								mostrarTablero();
+							}
 						}
-					}else {
-						mostrarErrorPorMovimientoIlegal(textJugadaActual);
-						mostrarTablero();
 					}
-				}else {
-					mostrarErrorEnFormatoDeEntrada();				
+				//si ocurre un error interno en el programa, se captura una excepcion y se muestra un error y finaliza la partida
+					//esto esta dentro del bucle
+				} catch (RuntimeException ex) {
+					mostrarErrorInterno(ex);
+					partidaEnMarcha = false;
 				}
 			}
+		//si la opcion seleccionada no esta disponnible, muestra un error y termina el programa
+		} catch (OpcionNoDisponibleException ex) {			
+			mostrarErrorSeleccionandoModo();
+			return;
+		//COn finally nos aseguramos que el juego termine correctamente, cerrando por ejemplo el scanner
+		} finally {
+			if(scanner !=null) {
+			finalizarPartida();
+			}
 		}
-		finalizarPartida();
+
+	}
+
+	/**
+	 * Deshace la última jugada realizada volviendo al estado previo.
+	 * 
+	 */
+	private static void deshacerJugada() {
+		deshacer.deshacerJugada();
+		arbitro = deshacer.consultarArbitroActual();
+		mostrarTablero();
+	}
+
+	/**
+	 * Muestra mensaje de error grave por error en el código del que no podemos
+	 * recuperarnos.
+	 * 
+	 * @param ex excepción generada
+	 */
+	private static void mostrarErrorInterno(RuntimeException ex) {
+		System.err.println("Error interno en código a corregir por el equipo informático.");
+		System.err.println("Mensaje asociado de error: " + ex.getMessage());
+		System.err.println("Traza detallada del error:");
+		ex.printStackTrace();
+		// sería mejor solución mandar dicha informacion de la traza a un fichero de log
+		// en lugar de a la consola, pero esta solución se verá en otras asignaturas
+	}
+
+	/**
+	 * Muestra mensaje de error grave si el modo de deshacer no es ninguno de los
+	 * dos disponibles.
+	 */
+	private static void mostrarErrorSeleccionandoModo() {
+		System.err.println("El modo seleccionado no se corresponde con ninguna de las dos opciones válidas.");
+		System.err.println("Debe introducir \"jugadas\" o \"arbitros\".");
+	}
+
+	/**
+	 * Extrae de los argumentos de ejecución el tipo de mecanismo de deshacer con el
+	 * que jugamos. No comprueba la corrección del texto introducido.
+	 * 
+	 * @param args argumentos
+	 * @throws OpcionNoDisponibleException si el argumento con el modo de deshacer
+	 *                                     no es correcto
+	 */
+	private static void extraerModoDeshacer(String[] args) throws OpcionNoDisponibleException {
+		// COMPLETAR POR EL ALUMNADO
+		// OBLIGATORIO COMPLETAR EL CUERPO DEL MÉTODO
+		//tomamos el primer elemento del arreglo args
+		//lo convierte en minuscula y lo asigna a la variable configuracion(variable estatica de tipo string)
+		configuracion = args[0].toLowerCase();
+	} 
+	
+	
+
+	/**
+	 * Selecciona el mecanismo de deshacer.
+	 * 
+	 * Por polimorfimo se conecta una instancia concreta del descendiente a la
+	 * interfaz para deshacer.
+	 *
+	 * @param configuracion texto con la selección actual de mecanismo de deshacer
+	 * @see noventagrados.control.undo.MecanismoDeDeshacer
+	 * @throws IllegalArgumentException mecanismo de deshacer no disponible
+	 */
+	private static void seleccionarMecanismoDeshacer(String configuracion) throws IllegalArgumentException {
+		switch (configuracion) {
+		case "jugadas":
+			deshacer = new MaquinaDelTiempoConJugadas(new Date());
+			break;
+		case "arbitros":
+			deshacer = new MaquinaDelTiempoConArbitros(new Date());
+			break;
+		default:
+			throw new IllegalArgumentException("Modo no definido:" + configuracion);
+		}
 	}
 
 	/**
@@ -100,10 +233,11 @@ public class NoventaGrados {
 	 */
 	private static void inicializarPartida() {
 		// Inicializaciones
-		tablero = new Tablero();
-		arbitro = new Arbitro(tablero);
+		arbitro = new Arbitro(new Tablero());
 		// Cargar piezas con la configuración inicial...
 		arbitro.colocarPiezasConfiguracionInicial();
+		// inicializamos mecanismo de deshacer
+		seleccionarMecanismoDeshacer(configuracion);
 		// Abrir la lectura desde teclado...
 		scanner = new Scanner(System.in);
 	}
@@ -129,6 +263,16 @@ public class NoventaGrados {
 	}
 
 	/**
+	 * Comprueba si se quiere deshacer la última jugada.
+	 * 
+	 * @param texto texto
+	 * @return true si el usuario introduce deshacer, false en caso contrario
+	 */
+	private static boolean comprobarDeshacer(String texto) {
+		return texto.equalsIgnoreCase("deshacer");
+	}
+
+	/**
 	 * Valida la corrección del formato de la jugada. Solo comprueba la corrección
 	 * del formato de entrada en cuanto al tablero, no la validez de la jugada en
 	 * cuanto a las reglas del juego.
@@ -144,7 +288,6 @@ public class NoventaGrados {
 	 */
 	private static boolean validarFormato(String textoJugada) {
 		// si la longitud es correcta y a la mitad hay un guion...
-		System.out.println(textoJugada.charAt(TAMAÑO_JUGADA / 2));
 		if (textoJugada.length() == TAMAÑO_JUGADA && textoJugada.charAt(TAMAÑO_JUGADA / 2) == '-') {
 			// acabar de validar dígitos en el resto de valores...
 			String origen = textoJugada.substring(0, INICIO_COORDENADA_DESTINO);
@@ -177,6 +320,7 @@ public class NoventaGrados {
 	private static Jugada extraerJugada(String jugadaTexto) {
 		Coordenada coordenadaOrigen = extraerCoordenada(jugadaTexto, 0, INICIO_COORDENADA_DESTINO - 1);
 		Coordenada coordenadaDestino = extraerCoordenada(jugadaTexto, INICIO_COORDENADA_DESTINO, TAMAÑO_JUGADA);
+		Tablero tablero = arbitro.consultarTablero(); // fix bug
 		Celda origen = tablero.consultarCelda(coordenadaOrigen);
 		Celda destino = tablero.consultarCelda(coordenadaDestino);
 		return new Jugada(origen, destino);
@@ -219,6 +363,7 @@ public class NoventaGrados {
 	 * @param jugada jugada
 	 */
 	private static void realizarEmpujón(Jugada jugada) {
+		deshacer.hacerJugada(jugada);
 		arbitro.empujar(jugada);
 	}
 
@@ -250,10 +395,11 @@ public class NoventaGrados {
 	 * Muestra el mensaje de bienvenida con instrucciones para finalizar la partida.
 	 */
 	private static void mostrarMensajeBienvenida() {
-		System.out.println("Bienvenido al juego de Noventa Grados 1.0");
+		System.out.println("Bienvenido al juego de Noventa Grados 2.0 - Máquina del tiempo con " + configuracion);
 		System.out.println(
 				"Introduzca sus jugadas con el formato dd-dd donde d es un dígito en el rango [0, 6] (por ejemplo 00-04 o 65-63).");
 		System.out.println("Para interrumpir la partida introduzca \"salir\".");
+		System.out.println("Para interrumpir la partida introduzca \"deshacer\".");
 		System.out.println("Disfrute de la partida...");
 	}
 
@@ -282,7 +428,7 @@ public class NoventaGrados {
 	 */
 	private static void mostrarTablero() {
 		System.out.println();
-		System.out.println(tablero.aTexto());
+		System.out.println(arbitro.consultarTablero().aTexto());
 	}
 
 	/**

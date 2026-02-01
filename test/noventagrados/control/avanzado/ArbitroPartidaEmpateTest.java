@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -121,7 +120,7 @@ public class ArbitroPartidaEmpateTest {
 				6 -- -- -- PN -- -- --  
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Empate con peón negro expulsando ambas reinas.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 				() -> assertNull(arbitro.consultarTurnoGanador(), "No debería haber turno ganador con empate."),
@@ -137,7 +136,7 @@ public class ArbitroPartidaEmpateTest {
 				() -> assertThat("La caja blanca no debería estar vacía.",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(4)),
 				() -> assertThat("La caja blanca no contiene las cuatro piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()),
+						arbitro.consultarCaja(Color.BLANCO).consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.REINA, Color.BLANCO),
 								new Pieza(TipoPieza.PEON, Color.BLANCO),
@@ -147,7 +146,7 @@ public class ArbitroPartidaEmpateTest {
 				() -> assertThat("La caja negra no debería estar vacía.",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(4)),
 				() -> assertThat("La caja negra no contiene las cuatro piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()),
+						arbitro.consultarCaja(Color.NEGRO).consultarPiezas(),
 						containsInAnyOrder(new Pieza(TipoPieza.REINA, Color.NEGRO),
 								new Pieza(TipoPieza.PEON, Color.NEGRO),		
 								new Pieza(TipoPieza.PEON, Color.NEGRO),	
@@ -215,7 +214,7 @@ public class ArbitroPartidaEmpateTest {
 				6 PN PN -- -- -- -- --
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Empate con peón negro expulsando ambas reinas.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 				() -> assertNull(arbitro.consultarTurnoGanador(), "No debería haber turno ganador con empate."),
@@ -231,7 +230,7 @@ public class ArbitroPartidaEmpateTest {
 				() -> assertThat("La caja blanca no debería estar vacía.",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(2)),
 				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()),
+						arbitro.consultarCaja(Color.BLANCO).consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.REINA, Color.BLANCO),
 								new Pieza(TipoPieza.PEON, Color.BLANCO)						
@@ -240,7 +239,7 @@ public class ArbitroPartidaEmpateTest {
 				() -> assertThat("La caja negra no debería estar vacía.",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(2)),
 				() -> assertThat("La caja negra no contiene las dos piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()),
+						arbitro.consultarCaja(Color.NEGRO).consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.REINA, Color.NEGRO),
 								new Pieza(TipoPieza.PEON, Color.NEGRO)						

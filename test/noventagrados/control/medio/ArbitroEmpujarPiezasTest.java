@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +95,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDeReinaBlancaEnHorizontal() {
 		Jugada jugada1 = fabricarJugada(tablero, 0, 0, 0, 4);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -130,7 +129,7 @@ public class ArbitroEmpujarPiezasTest {
 						arbitro.consultarTablero().consultarCelda(new Coordenada(0, 6)).estaVacia(), is(false)),
 				() -> assertThat("La caja blanca debería tener un peón",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(1)),
-				() -> assertThat("La caja blanca no contiene el peón esperado.", Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja blanca no contiene el peón esperado.", arbitro.consultarCaja(Color.BLANCO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.PEON, Color.BLANCO))),
 				() -> assertThat(EL_NÚMERO_DE_PEONES_BLANCOS_SOBRE_EL_TABLERO_NO_ES_CORRECTO,
 						tc.consultarNumeroPiezas(TipoPieza.PEON, Color.BLANCO), is(5)),	
@@ -151,7 +150,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDeReinaNegraEnHorizontal() {
 		Jugada jugada1 = fabricarJugada(tablero, 6, 6, 6, 2);
 		arbitro.empujar(jugada1); // no es necesario cambiar turno, no comprobamos legalidad
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -185,7 +184,7 @@ public class ArbitroEmpujarPiezasTest {
 						arbitro.consultarTablero().consultarCelda(new Coordenada(6, 0)).estaVacia(), is(false)),
 				() -> assertThat("La caja negra debería tener un peón",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(1)),
-				() -> assertThat("La caja negra no contiene el peón esperado.", Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja negra no contiene el peón esperado.", arbitro.consultarCaja(Color.NEGRO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.PEON, Color.NEGRO))),
 				() -> assertThat(EL_NÚMERO_DE_PEONES_NEGROS_SOBRE_EL_TABLERO_NO_ES_CORRECTO,
 						tc.consultarNumeroPiezas(TipoPieza.PEON, Color.NEGRO), is(5)),
@@ -208,7 +207,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDePeonAReinaBlancaEnHorizontal() {
 		Jugada jugada1 = fabricarJugada(tablero, 0, 3, 0, 1);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -238,7 +237,7 @@ public class ArbitroEmpujarPiezasTest {
 				() -> assertThat("La caja blanca debería tener un peón y una reina",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(2)),
 				
-				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.", Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.", arbitro.consultarCaja(Color.BLANCO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.REINA,Color.BLANCO), new Pieza(TipoPieza.PEON, Color.BLANCO))),
 				
 				
@@ -264,7 +263,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDePeonAReinaNegraEnHorizontal() {
 		Jugada jugada1 = fabricarJugada(tablero, 6, 3, 6, 5);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<Tablero>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -294,7 +293,7 @@ public class ArbitroEmpujarPiezasTest {
 				() -> assertThat("La caja negra debería tener un peón y una reina",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(2)),
 				
-				() -> assertThat("La caja negra no contiene las dos piezas esperadas.", Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja negra no contiene las dos piezas esperadas.", arbitro.consultarCaja(Color.NEGRO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.REINA,Color.NEGRO), new Pieza(TipoPieza.PEON, Color.NEGRO))),
 				
 				
@@ -320,7 +319,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDeReinaBlancaEnVertical() {
 		Jugada jugada1 = fabricarJugada(tablero, 0, 0, 4, 0);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<Tablero>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -354,7 +353,7 @@ public class ArbitroEmpujarPiezasTest {
 						arbitro.consultarTablero().consultarCelda(new Coordenada(6, 0)).estaVacia(), is(false)),
 				() -> assertThat("La caja blanca debería tener un peón",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(1)),
-				() -> assertThat("La caja blanca no contiene el peón esperado.", Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja blanca no contiene el peón esperado.", arbitro.consultarCaja(Color.BLANCO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.PEON, Color.BLANCO))),
 				() -> assertThat(EL_NÚMERO_DE_PEONES_BLANCOS_SOBRE_EL_TABLERO_NO_ES_CORRECTO,
 						tc.consultarNumeroPiezas(TipoPieza.PEON, Color.BLANCO), is(5)),	
@@ -379,7 +378,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDeReinaNegraEnVertical() {
 		Jugada jugada1 = fabricarJugada(tablero, 6, 6, 2, 6);
 		arbitro.empujar(jugada1); // no es necesario cambiar turno, no comprobamos legalidad
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -413,7 +412,7 @@ public class ArbitroEmpujarPiezasTest {
 						arbitro.consultarTablero().consultarCelda(new Coordenada(0, 6)).estaVacia(), is(false)),
 				() -> assertThat("La caja negra debería tener un peón",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(1)),
-				() -> assertThat("La caja negra no contiene el peón esperado.", Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja negra no contiene el peón esperado.", arbitro.consultarCaja(Color.NEGRO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.PEON, Color.NEGRO))),
 				() -> assertThat(EL_NÚMERO_DE_PEONES_NEGROS_SOBRE_EL_TABLERO_NO_ES_CORRECTO,
 						tc.consultarNumeroPiezas(TipoPieza.PEON, Color.NEGRO), is(5)),
@@ -438,7 +437,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDePeonAReinaBlancaEnVertical() {
 		Jugada jugada1 = fabricarJugada(tablero, 3, 0, 1, 0);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -468,7 +467,7 @@ public class ArbitroEmpujarPiezasTest {
 				() -> assertThat("La caja blanca debería tener un peón y una reina",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(2)),
 				
-				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.", Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.", arbitro.consultarCaja(Color.BLANCO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.REINA,Color.BLANCO), new Pieza(TipoPieza.PEON, Color.BLANCO))),
 				
 				
@@ -496,7 +495,7 @@ public class ArbitroEmpujarPiezasTest {
 	void comprobarEmpujeDePeonAReinaNegraEnVertical() {
 		Jugada jugada1 = fabricarJugada(tablero, 3, 6, 5, 6);
 		arbitro.empujar(jugada1);
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		// @formatter:off
 		/* 
 		 * <pre>  
@@ -526,7 +525,7 @@ public class ArbitroEmpujarPiezasTest {
 				() -> assertThat("La caja negra debería tener un peón y una reina",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(2)),
 				
-				() -> assertThat("La caja negra no contiene las dos piezas esperadas.", Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()), containsInAnyOrder(
+				() -> assertThat("La caja negra no contiene las dos piezas esperadas.", arbitro.consultarCaja(Color.NEGRO).consultarPiezas(), containsInAnyOrder(
 						new Pieza(TipoPieza.REINA,Color.NEGRO), new Pieza(TipoPieza.PEON, Color.NEGRO))),
 				
 				

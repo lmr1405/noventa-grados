@@ -17,7 +17,7 @@
  * definir objetos inmutables y estructurados de manera compacta y eficiente.</p>
  *
  * @author <a href="mailto:lmr1027@alu.ubu.es">Luis Menéndez</a>
- * @since 21/11/2024
+ * @since 1.0
  * @see noventagrados.util
  */
 package noventagrados.util;

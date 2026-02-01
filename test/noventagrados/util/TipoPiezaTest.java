@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.DisplayName;
