@@ -1,7 +1,7 @@
 package noventagrados.util;
 
 /**
- * Representa las posibles piezas en el juego noventa grados.
+ * Representa las posibles piezas en el juego noventa grados
  * <p>
  * Cada pieza viene representada por un caracter asociado, estas piezas son:
  * <ul>
@@ -11,7 +11,7 @@ package noventagrados.util;
  * 
  * @author Luis Menendez Ramos
  * @version 1.0
- * @since 23/10/2024
+ * @since 1.0
  * @see java.lang.Enum
  */
 

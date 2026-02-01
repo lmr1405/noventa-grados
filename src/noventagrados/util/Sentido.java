@@ -3,10 +3,10 @@ package noventagrados.util;
 /**
  * Modela los cuatro sentidos en los que se pueden realizar los movimientos:
  * {@code VERTICAL_N}, {@code VERTICAL_S}, {@code HORIZONTAL_E} y
- * {@code HORIZONTAL_O}
+ * {@code HORIZONTAL_O}.
  * <p>
  * Cada sentido se asocia a un desplazamiento en filas y columnas que define su
- * direccion en un tablero.
+ * direccion en un tablero
  * </p>
  * 
  * <ul>
@@ -22,7 +22,7 @@ package noventagrados.util;
  * 
  * @author Luis Menendez Ramos
  * @version 1.0
- * @since 21/10/2024
+ * @since 1.0
  * @see java.lang.Enum
  */
 

@@ -12,28 +12,39 @@ import noventagrados.util.TipoPieza;
 /**
  * La clase TableroConsultor permite realizar consultas sobre el estado de un
  * Tablero, como el calculo de sentidos de movimientos ,distancias entre celdas
- * y conteo de piezas.
+ * y conteo de piezas. Es generica y parametrizable para subtipos de tablero.
  * 
+ * @param <T> un suptipo de Tablero
  * @author <a href="lmr1027@alu.ubu.es">Luis Menendez</a>
  * @version 1.0
- * @since 02/11/2024
+ * @since 1.0
  */
 
-public class TableroConsultor {
+//al ser una clase generica, permite que funcione con diferentes tipos de datos. Con extends restringimos a que sean de tipo tablero
+public class TableroConsultor<T extends Tablero> {
 
 	/**
 	 * El tablero sobre el cual se realizarán las consultas.
 	 */
-	private Tablero tablero;
+	private final T tablero;
 
 	/**
 	 * Crea una nueva instancia de TableroConsultor con un tablero especificado.
 	 * 
 	 * @param tablero El tablero sobre el cual se realizaran las consultas.
 	 */
-	public TableroConsultor(Tablero tablero) {
+	public TableroConsultor(T tablero) {
 		this.tablero = tablero;
 	}
+
+	/**
+	 * Calcula el sentido del movimiento entre dos coordenadas.
+	 * 
+	 * @param origen  La coordenada de origen
+	 * @param destino La coordenada de destino
+	 * @return el sentido del movimiento, o null si el movimiento no es
+	 *         exclusivamente {@code HORIZONTAL} o {@code VERTICAL}
+	 */
 
 	/**
 	 * Calcula el sentido del movimiento entre dos coordenadas.
@@ -163,7 +174,6 @@ public class TableroConsultor {
 	public boolean estaReinaEnElCentro(Color color) {
 		int filaCentral = tablero.consultarNumeroFilas() / 2;
 		int columnaCentral = tablero.consultarNumeroColumnas() / 2;
-		//posicion central coordenadas 3,3
 		Coordenada posicionCentral = new Coordenada(filaCentral, columnaCentral);
 
 		Pieza pieza = tablero.consultarCelda(posicionCentral).consultarPieza();

@@ -15,7 +15,7 @@ package noventagrados.util;
  * 
  * @author Luis Menendez Ramos
  * @version 1.0
- * @since 21/10/2024
+ * @since 1.0
  */
 
 public enum Color {

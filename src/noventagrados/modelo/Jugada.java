@@ -11,7 +11,7 @@ package noventagrados.modelo;
  * 
  * @author <a href="mailto:lmr1027@alu.ubu.es">Luis Menendez</a>
  * @version 1.0
- * @since 25/10/2024
+ * @since 1.0
  */
 
 public record Jugada(Celda origen, Celda destino) {

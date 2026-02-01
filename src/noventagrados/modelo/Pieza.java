@@ -11,7 +11,7 @@ import noventagrados.util.TipoPieza;
  * 
  * @author <a href="lmr1027@alu.ubu.es">Luis Menendez</a>
  * @version 1.0
- * @since 23/10/24
+ * @since 1.0
  */
 
 public class Pieza {
@@ -28,8 +28,8 @@ public class Pieza {
 	/**
 	 * Crea una nueva pieza con el tipo de pieza y el color especifico.
 	 * 
-	 * @param tipoPieza El tipo de pieza que se le va a asignar a la pieza
-	 * @param color     El tipo de color que se le va a asignar a la pieza
+	 * @param tipoPieza El tipo de pieza que se le va a asignar a la pieza.
+	 * @param color     El tipo de color que se le va a asignar a la pieza,
 	 */
 	public Pieza(TipoPieza tipoPieza, Color color) {
 		this.tipoPieza = tipoPieza;
@@ -40,7 +40,7 @@ public class Pieza {
 	 * Devuelve una cadena de representación en texto correspondiente al tipo de
 	 * pieza y color.
 	 * 
-	 * @return Cadena de texto del tipo de pieza y el color
+	 * @return Cadena de texto del tipo de pieza y el color,
 	 * @see TipoPieza#toChar()
 	 * @see Color#toChar()
 	 */

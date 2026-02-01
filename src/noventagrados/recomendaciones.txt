@@ -1,0 +1,9 @@
+Nota --> 8.3
+
+Me ha quitado puntos por
+metodo extraerModoDeshacer
+	ya que no lanza la excepcion
+	
+Try y catch anidado, evitar anidar
+Arraylist ....= new ArrayList.... mal en la parte izquierda la clase generica y en la derecha la clase implementada
+	ej: List ... = new ArrayList...
