@@ -36,3 +36,15 @@ En **Noventa Grados**, cada jugador controla piezas blancas o negras y toma turn
 2. Coloca las piezas en el tablero inicial (7x7).
 3. Toma turnos para mover las piezas, respetando las reglas de movimiento y buscando cumplir una de las condiciones de victoria.
 4. Que gane el mejor mejor
+
+## Como ejecutar el juego
+### Requisitos previos
+- **Java 11** o superior debe estar instalado en tu sistema.
+
+### Ejecución
+En linux
+Para ejecutar el juego en modo grafico  
+Otorgale los permisos necesarios para ello  
+	1.- escribiremos en la consola chmod +x ejecutar_gui.sh  
+	2.- Ejecuta ./ejecutar_gui.sh  
+	3.- Disfruta de tu partida  
