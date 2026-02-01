@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -197,7 +198,7 @@ public class TableroTest {
 		@DisplayName("Comprueba que la consulta de todas las celdas devuelve efectivamente todas (con independencia del orden)")
 		@Test
 		void comprobarConsultarCeldas() {
-			Celda[] todas = tablero.consultarCeldas();
+			List<Celda> todas = tablero.consultarCeldas();
 			int encontrada = 0;
 			for (int i = 0; i < tablero.consultarNumeroFilas(); i++) {
 				for (int j = 0; j < tablero.consultarNumeroColumnas(); j++) {

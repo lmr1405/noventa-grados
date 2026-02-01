@@ -4,13 +4,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Timeout;
@@ -63,7 +63,7 @@ public class CajaTest {
 				() -> assertThat(NÚMERO_DE_REINAS_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.REINA), is(0)),
 				() -> assertThat(COLOR_MAL_INICIALIZADO_EN_LA_CAJA, cajaLocal.consultarColor(), is(color)),
 				() -> assertThat(INCORRECTO_NÚMERO_DE_PIEZAS_INICIALES_EN_LA_CAJA,
-						cajaLocal.consultarPiezas().length, is(0)));
+						cajaLocal.consultarPiezas().size(), is(0)));
 	}
 	
 	/**
@@ -82,10 +82,10 @@ public class CajaTest {
 		assertAll("comprobar estado inicial de la caja con siete peones",
 				() -> assertThat(COLOR_MAL_INICIALIZADO_EN_LA_CAJA, cajaLocal.consultarColor(), is(color)),
 				() -> assertThat(INCORRECTO_NÚMERO_DE_PIEZAS_INICIALES_EN_LA_CAJA,
-						cajaLocal.consultarPiezas().length, is(7)),
+						cajaLocal.consultarPiezas().size(), is(7)),
 				() -> assertThat(NÚMERO_DE_PEONES_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.PEON), is(7)),
 				() -> assertThat(NÚMERO_DE_REINAS_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.REINA), is(0)),
-				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, Arrays.asList(cajaLocal.consultarPiezas()),
+				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, cajaLocal.consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.PEON, color),
 								new Pieza(TipoPieza.PEON, color),
@@ -115,7 +115,7 @@ public class CajaTest {
 		assertAll("comprobar estado inicial de la caja vací",
 				() -> assertThat(COLOR_MAL_INICIALIZADO_EN_LA_CAJA, cajaLocal.consultarColor(), is(color)),
 				() -> assertThat(INCORRECTO_NÚMERO_DE_PIEZAS_INICIALES_EN_LA_CAJA,
-						cajaLocal.consultarPiezas().length, is(0)),
+						cajaLocal.consultarPiezas().size(), is(0)),
 				() -> assertThat(NÚMERO_DE_PEONES_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.PEON), is(0)),
 				() -> assertThat(NÚMERO_DE_REINAS_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.REINA), is(0))
 				);
@@ -138,10 +138,10 @@ public class CajaTest {
 		assertAll("comprobar estado inicial de la caja con cuatro piezas",
 				() -> assertThat(COLOR_MAL_INICIALIZADO_EN_LA_CAJA, cajaLocal.consultarColor(), is(color)),
 				() -> assertThat(INCORRECTO_NÚMERO_DE_PIEZAS_INICIALES_EN_LA_CAJA,
-						cajaLocal.consultarPiezas().length, is(4)),
+						cajaLocal.consultarPiezas().size(), is(4)),
 				() -> assertThat(NÚMERO_DE_PEONES_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.PEON), is(3)),
 				() -> assertThat(NÚMERO_DE_REINAS_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.REINA), is(1)),
-				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, Arrays.asList(cajaLocal.consultarPiezas()),
+				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, cajaLocal.consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.PEON, color),
 								new Pieza(TipoPieza.PEON, color),
@@ -168,11 +168,11 @@ public class CajaTest {
 		assertAll("comprobar estado inicial de la caja solo con siete peones",
 				() -> assertThat(COLOR_MAL_INICIALIZADO_EN_LA_CAJA, cajaLocal.consultarColor(), is(color)),
 				() -> assertThat(INCORRECTO_NÚMERO_DE_PIEZAS_INICIALES_EN_LA_CAJA,
-						cajaLocal.consultarPiezas().length, is(7)),
+						cajaLocal.consultarPiezas().size(), is(7)),
 				() -> assertThat(NÚMERO_DE_PEONES_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.PEON), is(7)),
 				() -> assertThat(NÚMERO_DE_REINAS_INCORRECTO, cajaLocal.contarPiezas(TipoPieza.REINA), is(0)),
 
-				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, Arrays.asList(cajaLocal.consultarPiezas()),
+				() -> assertThat(NO_ESTÁN_TODAS_LAS_PIEZAS_EN_LA_CAJA, cajaLocal.consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.PEON, color),
 								new Pieza(TipoPieza.PEON, color),
@@ -195,14 +195,15 @@ public class CajaTest {
 	void comprobarClonacionConCajaInicialmenteVacía(Color color) {
 		Caja cajaLocal = new Caja(color);
 		Caja cajaClon = cajaLocal.clonar();
-		Pieza[] disponiblesEnCajaLocal = cajaLocal.consultarPiezas();
-		Pieza[] disponiblesEnCajaClon = cajaClon.consultarPiezas();
+		List<Pieza> disponiblesEnCajaLocal = cajaLocal.consultarPiezas();
+		List<Pieza> disponiblesEnCajaClon = cajaClon.consultarPiezas();
 		assertAll("comprobando clonación de caja vacia",
 			() -> assertNotSame(cajaLocal, cajaClon, "No deberían tener la misma referencia el original y el clon"),
-			() -> assertThat("El contenido de las cajas debería ser equivalente", cajaLocal, is(cajaClon)),
-			() -> assertThat("El número de piezas disponibles en el clon es incorrecto.", disponiblesEnCajaClon.length,is(0)),
+			() -> assertThat("El contenido de las cajas debería ser equivalente", cajaClon, is(cajaLocal)),
+			() -> assertThat("El número de piezas disponibles en el clon es incorrecto.", disponiblesEnCajaClon.size(),is(0)),
 			() -> assertNotSame(disponiblesEnCajaLocal, disponiblesEnCajaClon, "No deberían tener la misma referencia."),
-			() -> assertArrayEquals(disponiblesEnCajaLocal, disponiblesEnCajaClon,"Los arrays de piezas disponibles no son iguales en contenido.")
+			() -> assertThat("Las listas de piezas disponibles no son iguales en contenido.",
+					disponiblesEnCajaLocal,containsInAnyOrder(disponiblesEnCajaClon.toArray()))
 			);
 	}
 	
@@ -222,19 +223,21 @@ public class CajaTest {
 		cajaLocal.añadir(new Pieza(TipoPieza.REINA, color));
 		
 		Caja cajaClon = cajaLocal.clonar();
-		Pieza[] disponiblesEnCajaLocal = cajaLocal.consultarPiezas();
-		Pieza[] disponiblesEnCajaClon = cajaClon.consultarPiezas();
+		List<Pieza> disponiblesEnCajaLocal = cajaLocal.consultarPiezas();
+		List<Pieza> disponiblesEnCajaClon = cajaClon.consultarPiezas();
 		assertAll("comprobando clonación de caja llena",
 			() -> assertNotSame(cajaLocal, cajaClon, "No deberían tener la misma referencia el original y el clon"),
-			() -> assertThat("El contenido de las cajas debería ser equivalente", cajaLocal, is(cajaClon)),
-			() -> assertThat("El número de piezas disponibles en el clon es incorrecto.", disponiblesEnCajaClon.length,is(7)),
+			() -> assertThat("El contenido de las cajas debería ser equivalente", cajaClon, is(cajaLocal)),
+			() -> assertThat("El número de piezas disponibles en el clon es incorrecto.", disponiblesEnCajaClon.size(),is(7)),
 			() -> assertNotSame(disponiblesEnCajaLocal, disponiblesEnCajaClon, "No deberían tener la misma referencia."),
-			() -> assertArrayEquals(disponiblesEnCajaLocal, disponiblesEnCajaClon,"Los arrays de piezas disponibles no son iguales en contenido.")
+			() -> assertThat("Las listas de piezas disponibles no son iguales en contenido.",
+					disponiblesEnCajaLocal, Matchers.contains(disponiblesEnCajaClon.toArray()))
 			);
 		// comprobando adicionalmente la clonación en profundidad de las piezas
-		for(int i = 0; i < disponiblesEnCajaLocal.length; i++) {
-			assertNotSame(disponiblesEnCajaLocal[i], disponiblesEnCajaClon[i], "No se han clonado en profundidad las piezas disponibles en la caja.");
+		for(int i = 0; i < disponiblesEnCajaLocal.size(); i++) {
+			assertNotSame(disponiblesEnCajaLocal.get(i), disponiblesEnCajaClon.get(i), "No se han clonado en profundidad las piezas disponibles en la caja.");
 		}
 	}
 
 }
+

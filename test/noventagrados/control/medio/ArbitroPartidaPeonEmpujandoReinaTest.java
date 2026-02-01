@@ -3,12 +3,11 @@ package noventagrados.control.medio;
 import static noventagrados.control.TestUtil.fabricarJugada;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Timeout.ThreadMode.SEPARATE_THREAD;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -109,7 +108,7 @@ public class ArbitroPartidaPeonEmpujandoReinaTest {
 				6 -- -- -- PN -- PN RN  
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de negras expulsando peón a reina blanca.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 
@@ -126,7 +125,7 @@ public class ArbitroPartidaPeonEmpujandoReinaTest {
 				() -> assertThat("La caja blanca no debería estar vacía.",
 						arbitro.consultarCaja(Color.BLANCO).contarPiezas(), is(2)),
 				() -> assertThat("La caja blanca no contiene las dos piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.BLANCO).consultarPiezas()),
+						arbitro.consultarCaja(Color.BLANCO).consultarPiezas(),
 						containsInAnyOrder(new Pieza(TipoPieza.REINA, Color.BLANCO),
 								new Pieza(TipoPieza.PEON, Color.BLANCO)						
 						)),
@@ -186,7 +185,7 @@ public class ArbitroPartidaPeonEmpujandoReinaTest {
 				6 PN PN PB -- -- -- --
 				  0  1  2  3  4  5  6  """.replaceAll("\\s", "");
 		String cadenaObtenida = arbitro.consultarTablero().aTexto().replaceAll("\\s", "");
-		TableroConsultor tc = new TableroConsultor(arbitro.consultarTablero());
+		TableroConsultor<Tablero> tc = new TableroConsultor<>(arbitro.consultarTablero());
 		assertAll("Victoria de blancas expulsando peón a reina negra.",
 				() -> assertThat("La partida no está finalizada.", arbitro.estaFinalizadaPartida(), is(true)),
 
@@ -206,7 +205,7 @@ public class ArbitroPartidaPeonEmpujandoReinaTest {
 				() -> assertThat("La caja negra no debería estar vacía.",
 						arbitro.consultarCaja(Color.NEGRO).contarPiezas(), is(2)),
 				() -> assertThat("La caja negra no contiene las dos piezas esperadas.",
-						Arrays.asList(arbitro.consultarCaja(Color.NEGRO).consultarPiezas()),
+						arbitro.consultarCaja(Color.NEGRO).consultarPiezas(),
 						containsInAnyOrder(
 								new Pieza(TipoPieza.REINA, Color.NEGRO),
 								new Pieza(TipoPieza.PEON, Color.NEGRO)						

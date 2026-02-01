@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import noventagrados.control.Arbitro;
+import noventagrados.modelo.Celda;
 import noventagrados.modelo.Jugada;
 import noventagrados.modelo.Tablero;
+import noventagrados.util.Coordenada;
 
 /**
  * Comprobación de movimientos legales del árbitro.
@@ -30,7 +32,7 @@ import noventagrados.modelo.Tablero;
 public class ArbitroMovimientosLegalesTest {
 
 	/** Texto de inicio para movimiento ilegal. */
-	private static final String EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA = "El movimiento debería ser ilegal para ";
+	private static final String EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA = "El movimiento debería ser legal para ";
 
 	/** Árbitro de testing. */
 	private Arbitro arbitro;
@@ -82,13 +84,13 @@ public class ArbitroMovimientosLegalesTest {
 	
 		
 		assertAll("mover pieza blanca en horizontal",
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
 				);
 		
 	}
@@ -113,13 +115,13 @@ public class ArbitroMovimientosLegalesTest {
 		Jugada jugada7 = fabricarJugada(tablero,3,0,5,0);	
 		
 		assertAll("mover pieza blanca en vertical",
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
 				);		
 	}
 	
@@ -142,16 +144,21 @@ public class ArbitroMovimientosLegalesTest {
 		Jugada jugada6 = fabricarJugada(tablero,6,4,6,3);
 		Jugada jugada7 = fabricarJugada(tablero,6,5,6,4);
 		
+		// empujamos con blanca para iniciar partida
+		Celda origen = arbitro.consultarTablero().consultarCelda(new Coordenada(3,0));
+		Celda destino = arbitro.consultarTablero().consultarCelda(new Coordenada(5,0));
+		arbitro.empujar(new Jugada(origen, destino));
+		
 		arbitro.cambiarTurno(); // cambiamos turno para que pueda mover negras
 		
 		assertAll("mover pieza negra en horizontal",
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
 				);
 		
 	}
@@ -175,16 +182,22 @@ public class ArbitroMovimientosLegalesTest {
 		Jugada jugada6 = fabricarJugada(tablero,6,4,2,4);
 		Jugada jugada7 = fabricarJugada(tablero,6,5,2,5);
 		
+		// empujamos con blanca para iniciar partida
+		Celda origen = arbitro.consultarTablero().consultarCelda(new Coordenada(0,3));
+		Celda destino = arbitro.consultarTablero().consultarCelda(new Coordenada(0,5));
+		arbitro.empujar(new Jugada(origen, destino));
+		// cambiar turno
 		arbitro.cambiarTurno(); // cambiamos turno para que pueda mover negras
+
 		
 		assertAll("mover pieza negra en vertical",
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
-				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_ILEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada1, arbitro.esMovimientoLegal(jugada1), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada2, arbitro.esMovimientoLegal(jugada2), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada3, arbitro.esMovimientoLegal(jugada3), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada4, arbitro.esMovimientoLegal(jugada4), is(true)),
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada5, arbitro.esMovimientoLegal(jugada5), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada6, arbitro.esMovimientoLegal(jugada6), is(true)),	
+				() -> assertThat(EL_MOVIMIENTO_DEBERÍA_SER_LEGAL_PARA + jugada7, arbitro.esMovimientoLegal(jugada7), is(true))
 				);
 		
 	}

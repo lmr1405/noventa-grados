@@ -1,6 +1,7 @@
 package noventagrados.control.basico;
 
 
+import static noventagrados.control.TestUtil.fabricarJugada;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import static noventagrados.control.TestUtil.fabricarJugada;
 import noventagrados.control.Arbitro;
 import noventagrados.modelo.Jugada;
 import noventagrados.modelo.Tablero;
