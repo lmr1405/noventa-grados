@@ -1,7 +1,7 @@
 # Noventa Grados
 **Juego realizado para un trabajo de clase de la asignatura de Metodología de la programación de segundo año de Ingeniería Informática.**
 
-![Pantalla de Inicio](https://github.com/lmr1405/juego-noventa-grados2.0/blob/main/images/inicio.png?raw=true)
+![Pantalla de Inicio](https://github.com/lmr1405/noventa-grados/blob/main/images/inicio.png?raw=true)
 
 
 
